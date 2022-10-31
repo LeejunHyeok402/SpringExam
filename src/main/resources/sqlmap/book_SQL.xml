@@ -28,7 +28,7 @@
 	-->
 	<!-- bookVO(parameterType) => {"bookId":"1",...나머지는 빈값 -->
 	<!-- bookVO(resultType) => {"booId":"1","title":"개똥이","category":"소설"...} -->
-	<select id="select_detail" parameterType="bookVO" resultType="bookVO">
+	<select id="select_detail" parameterType="kr.or.ddit.vo.BookVO" resultType="kr.or.ddit.vo.BookVO">
 	
 		SELECT BOOK_ID, TITLE, CATEGORY, PRICE, INSERT_DATE 
 		FROM BOOK 
@@ -50,7 +50,7 @@
 	 	AND (생략)
 	 	AND => 정상
 	  -->
-	<select id="list" resultType="bookVO" parameterType="string">
+	<select id="list" resultType="kr.or.ddit.vo.BookVO" parameterType="string">
 	
 	SELECT BOOK_ID, TITLE, CATEGORY, PRICE, INSERT_DATE 
 	FROM BOOK
@@ -64,7 +64,7 @@
 	</select>
 	
 	<!-- 책 수정하기 -->
-	<update id="update" parameterType="bookVO">
+	<update id="update" parameterType="kr.or.ddit.vo.BookVO">
 	
 	UPDATE 	BOOK 
 	SET 	TITLE= '#{title}', category='#{category}', PRICE=#{price}
@@ -82,4 +82,18 @@
 	book_id = #{bookId}
 	
 	</delete>
+	
+	 <update id="insertAttach" parameterType="java.util.List">
+       <foreach collection="list" item="attachVO" open="INSERT ALL "
+          close="SELECT * FROM SYS.DUAL" separator=" ">
+          INTO ATTACH VALUES(#{attachVO.seq},#{attachVO.tid},#{attachVO.attachName}
+             ,#{attachVO.attachSize},#{attachVO.attachType},sysdate)
+       </foreach>
+    </update>
+    
+    <select id="boardMemberList" resultType="kr.or.ddit.vo.BoardMemberVO">
+    	SELECT 
+ MEM_ID, MEM_PASS, MEM_NAME, MEM_REGNO1, MEM_REGNO2, MEM_BIR, MEM_ZIP, MEM_ADD1, MEM_ADD2, MEM_HOMETEL, MEM_COMTEL, MEM_HP, MEM_MAIL, MEM_JOB, MEM_LIKE, MEM_MEMORIAL, MEM_MEMORIALDAY, MEM_MILEAGE, MEM_DELETE
+    	FROM MEMBER
+    </select>
 </mapper>

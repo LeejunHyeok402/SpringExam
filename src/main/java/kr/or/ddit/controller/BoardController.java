@@ -4,24 +4,30 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import kr.or.ddit.service.BoardService;
+import kr.or.ddit.vo.BoardMemberVO;
 import kr.or.ddit.vo.BookVO;
 import lombok.extern.slf4j.Slf4j;
 
 //자바빈에 넣기
 @Slf4j
 @Controller
-@RequestMapping(value="/board")
 public class BoardController {
+	
+	@Autowired
+	BoardService boardService;
 	
 	/*	RequestMapping의 value속성에 요청 경로를 설정	
 	 	-요청 경로는 반드시 설정해야 하는 필수 정보
@@ -210,5 +216,13 @@ public class BoardController {
 		return bookVOList;
 	}
 	
+	@GetMapping("board/boards")
+	public String boards(Model model) {
+		List<BoardMemberVO> list = this.boardService.boards();
+		log.info(list.toString());
+		model.addAttribute("data", list);
+		
+		return "board/boards";
+	}
 }
 
