@@ -1,27 +1,35 @@
 package kr.or.ddit.vo;
 
+import java.util.Arrays;
 import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.web.multipart.MultipartFile;
 
 public class BoardMemberVO {
 	private String memId;
-	private String memPass;
+	private String memPass = "asdfasdf";
 	private String memName;
-	private String memRegno1;
-	private String memRegno2;
+	private String memRegno1 = "760115";
+	private String memRegno2 = "1406420";
+	
+	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date memBir;
-	private String memZip;
-	private String memAdd1;
-	private String memAdd2;
-	private String memHometel;
-	private String memComtel;
-	private String memHp;
-	private String memMail;
+	private String memZip = "-1";
+	private String memAdd1 = "-1";
+	private String memAdd2 = "-1";
+	private String memHometel = "-1";
+	private String memComtel = "-1";
+	private String memHp = "-1";
+	private String memMail = "-1";
 	private String memJob;
 	private String memLike;
-	private String memMemorial;
+	private String memMemorial ="-1";
 	private Date memMemorialday;
-	private int memMileage;
-	private String memDelete;
+	private int memMileage = -1;
+	private String memDelete =  "";
+	
+	private MultipartFile[] memberImage;
 	
 	public BoardMemberVO() {}
 
@@ -71,6 +79,7 @@ public class BoardMemberVO {
 
 	public void setMemBir(Date memBir) {
 		this.memBir = memBir;
+		this.memMemorialday = memBir;
 	}
 
 	public String getMemZip() {
@@ -177,6 +186,14 @@ public class BoardMemberVO {
 		this.memDelete = memDelete;
 	}
 
+	public MultipartFile[] getMemberImage() {
+		return memberImage;
+	}
+
+	public void setMemberImage(MultipartFile[] memberImage) {
+		this.memberImage = memberImage;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardMemberVO [memId=" + memId + ", memPass=" + memPass + ", memName=" + memName + ", memRegno1="
@@ -184,7 +201,9 @@ public class BoardMemberVO {
 				+ memAdd1 + ", memAdd2=" + memAdd2 + ", memHometel=" + memHometel + ", memComtel=" + memComtel
 				+ ", memHp=" + memHp + ", memMail=" + memMail + ", memJob=" + memJob + ", memLike=" + memLike
 				+ ", memMemorial=" + memMemorial + ", memMemorialday=" + memMemorialday + ", memMileage=" + memMileage
-				+ ", memDelete=" + memDelete + "]";
+				+ ", memDelete=" + memDelete + ", memberImage=" + Arrays.toString(memberImage) + "]";
 	}
+
+	
 
 }

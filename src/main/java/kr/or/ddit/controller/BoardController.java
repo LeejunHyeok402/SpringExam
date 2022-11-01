@@ -10,7 +10,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -223,6 +225,20 @@ public class BoardController {
 		model.addAttribute("data", list);
 		
 		return "board/boards";
+	}
+	
+	@GetMapping("board/insertBoard")
+	public String board() {
+		return "board/insert";
+	}
+	
+	@PostMapping("board/insert")
+	public String boardInsert(@ModelAttribute BoardMemberVO vo) {
+		log.info("------------boardVO : "+vo.toString());
+		
+		this.boardService.boardMemberInsert(vo);
+		
+		return "redirect:/board/boards";
 	}
 }
 

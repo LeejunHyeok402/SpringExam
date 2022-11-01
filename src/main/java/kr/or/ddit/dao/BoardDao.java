@@ -6,8 +6,11 @@ import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import kr.or.ddit.vo.AttachVO;
 import kr.or.ddit.vo.BoardMemberVO;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Repository
 public class BoardDao {
 	
@@ -15,6 +18,15 @@ public class BoardDao {
 	SqlSessionTemplate sqlSessionTemplate;
 	
 	public List<BoardMemberVO> boards(){
-		return this.sqlSessionTemplate.selectList("book.boardMemberList");
+		return this.sqlSessionTemplate.selectList("board.boardMemberList");
+	}
+	
+	public int boardMemberInsert(BoardMemberVO boardMemberVO) {
+		return this.sqlSessionTemplate.insert("board.boardMemberInsert",boardMemberVO );
+	}
+	
+	public int insertAttach(List<AttachVO> attachVOList) {
+		log.info("dao: "+this.sqlSessionTemplate);
+		return this.sqlSessionTemplate.insert("board.insertAttach", attachVOList);
 	}
 }

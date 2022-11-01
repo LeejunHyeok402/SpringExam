@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <!-- namespace : xml파일은 여려개일 수 있으므로 이를 구별하기 위한 식별 용도로 사용 -->
-<mapper namespace="book">
+<mapper namespace = "book">
 
 	<!-- MyBatis에서 제공해주는 데이터 입력을 나타내는 태그
 		1) 드루와: Dao 객체가 던진 데이터 타입(String, ing,hashMap,VO,List) parameterType만 씀
@@ -94,6 +94,6 @@
     <select id="boardMemberList" resultType="kr.or.ddit.vo.BoardMemberVO">
     	SELECT 
  MEM_ID, MEM_PASS, MEM_NAME, MEM_REGNO1, MEM_REGNO2, MEM_BIR, MEM_ZIP, MEM_ADD1, MEM_ADD2, MEM_HOMETEL, MEM_COMTEL, MEM_HP, MEM_MAIL, MEM_JOB, MEM_LIKE, MEM_MEMORIAL, MEM_MEMORIALDAY, MEM_MILEAGE, MEM_DELETE
-    	FROM MEMBER
+    	FROM MEMBERBOARD
     </select>
 </mapper>

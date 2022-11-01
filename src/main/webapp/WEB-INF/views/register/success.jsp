@@ -7,5 +7,6 @@
 </head>
 <body>
 	<h2>성공!</h2>
+	<h1>${result}</h1>
 </body>
 </html>

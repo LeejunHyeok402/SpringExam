@@ -7,4 +7,6 @@ import kr.or.ddit.vo.BoardMemberVO;
 public interface BoardService {
 	
 	public List<BoardMemberVO> boards();
+
+	int boardMemberInsert(BoardMemberVO boardMemberVO);
 }

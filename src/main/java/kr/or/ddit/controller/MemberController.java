@@ -1,12 +1,17 @@
 package kr.or.ddit.controller;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.inject.Inject;
+
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,15 +19,21 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import kr.or.ddit.service.BoardService;
+import kr.or.ddit.service.MemberService;
+import kr.or.ddit.vo.AddressVO;
 import kr.or.ddit.vo.BoardMemberVO;
+import kr.or.ddit.vo.CardVO;
 import kr.or.ddit.vo.MemberVO;
 import lombok.extern.slf4j.Slf4j;
+
 
 @Slf4j
 @Controller
 public class MemberController {
 	
-	
+	//DI(의존성 주입), IOC(제어의 역전)
+	@Inject
+	MemberService memberService;
 	
 	//요청 파라미터 : register?userId=hongkd&passwd=1234
 	@GetMapping("/register")
@@ -110,10 +121,29 @@ public class MemberController {
 	//폼 텍스트 필드 요소의 값을 자바빈즈 매개변수의 정수 타입 매개변수로 처리 됨
 	//@modelAttribute 생략가능
 	@PostMapping("/register/register05")
-	public String register05ByBeansPost(MemberVO memberVO,int coin) {
+	public String register05ByBeansPost(@ModelAttribute MemberVO memberVO,int coin,ArrayList<String> cars,AddressVO addressVO,Model model) {
 		log.info("memberVO: " +memberVO.toString());
-		log.info("coin: " +coin);
+//		log.info("coin: " +coin);
+//		log.info("birth: " +memberVO.getBirth());
+//		log.info("nationality: "+memberVO.getNationality());
+//		String[] carList = memberVO.getCars();
+//		log.info("cars"+cars.toString());
+//		for (String car : carList) {
+//			log.info("car: "+car);
+//		}
+		List<CardVO> cardVOList = memberVO.getCardVOList();
+		log.info("처음 AddressVO: "+memberVO.toString());
+		//cars -> car
+		String car = StringUtils.join(memberVO.getCars(),",");
+		memberVO.setCar(car);
+		//hobbyList ->hobby
+		String hobby = StringUtils.join(memberVO.getHobbyList(),",");
+		memberVO.setHobby(hobby);
 		
+		int result = this.memberService.memberInsert(memberVO);
+		model.addAttribute("result",result);
+		log.info("나중 AddressVO: "+memberVO.toString());
+		log.info("cardVO: "+cardVOList);
 		return "register/success";
 	}
 	
