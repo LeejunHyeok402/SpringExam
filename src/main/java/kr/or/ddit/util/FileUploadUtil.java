@@ -24,7 +24,7 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Slf4j
 public class FileUploadUtil {
 	
-	private static String uploadFolder = "C:\\eclipse-jee-2020-06-R-win32-x86_64\\workspace\\springProduct\\src\\main\\webapp\\resources\\upload"; 
+	private static String uploadFolder = "C:\\eclipse-jee-2020-06-R-win32-x86_64\\workspace\\springProj\\src\\main\\webapp\\resources\\upload"; 
 	
 	//파일 업로드 실행
 	public static List<AttachVO> fileUploadAction(MultipartFile[] multipartFiles,String tid) {

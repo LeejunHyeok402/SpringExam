@@ -1,6 +1,7 @@
 package kr.or.ddit.dao;
 
 import java.util.List;
+import java.util.Map;
 
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +18,8 @@ public class BoardDao {
 	@Autowired
 	SqlSessionTemplate sqlSessionTemplate;
 	
-	public List<BoardMemberVO> boards(){
-		return this.sqlSessionTemplate.selectList("board.boardMemberList");
+	public List<BoardMemberVO> boards(Map<String,String> map){
+		return this.sqlSessionTemplate.selectList("board.boardMemberList",map);
 	}
 	
 	public int boardMemberInsert(BoardMemberVO boardMemberVO) {
@@ -28,5 +29,13 @@ public class BoardDao {
 	public int insertAttach(List<AttachVO> attachVOList) {
 		log.info("dao: "+this.sqlSessionTemplate);
 		return this.sqlSessionTemplate.insert("board.insertAttach", attachVOList);
+	}
+	
+	public int getTotal(Map<String,String> map) {
+		return this.sqlSessionTemplate.selectOne("board.getTotal",map);
+	}
+	
+	public int idCheck(String memId) {
+		return this.sqlSessionTemplate.selectOne("board.idCheck",memId);
 	}
 }

@@ -20,7 +20,7 @@ public class BoardMemberVO {
 	private String memAdd2 = "-1";
 	private String memHometel = "-1";
 	private String memComtel = "-1";
-	private String memHp = "-1";
+	private String memHp;
 	private String memMail = "-1";
 	private String memJob;
 	private String memLike;

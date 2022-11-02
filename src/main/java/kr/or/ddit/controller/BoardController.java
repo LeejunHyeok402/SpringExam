@@ -2,7 +2,9 @@ package kr.or.ddit.controller;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +18,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import kr.or.ddit.service.BoardService;
+import kr.or.ddit.util.ArticlePage;
 import kr.or.ddit.vo.BoardMemberVO;
 import kr.or.ddit.vo.BookVO;
 import lombok.extern.slf4j.Slf4j;
@@ -219,11 +223,30 @@ public class BoardController {
 	}
 	
 	@GetMapping("board/boards")
-	public String boards(Model model) {
-		List<BoardMemberVO> list = this.boardService.boards();
+	public String boards(Model model,@RequestParam(defaultValue="1",required=false) int currentPage
+			,@RequestParam Map<String,String> map) {
+		log.info("currentPage: "+map);
+		String cPage = map.get("currentPage");
+		String show = map.get("show");
+		String keyword = map.get("keyword");
+		if(cPage==null) {
+			map.put("currentPage", "1");
+		}
+		if(show == null || show=="") {
+			map.put("show", "10");
+		}
+		if(keyword == null) {
+			map.put("keyword", "");
+		}
+		List<BoardMemberVO> list = this.boardService.boards(map);
 		log.info(list.toString());
-		model.addAttribute("data", list);
+		int size = Integer.parseInt(map.get("show"));
 		
+		
+		int total = this.boardService.getTotal(map);
+		//(전체 글 수, 현재페이지, 한 화면에 보여질 행 수, select 결과 list)
+		model.addAttribute("data", new ArticlePage<BoardMemberVO>(total, currentPage, size, list));
+		model.addAttribute("show",size);
 		return "board/boards";
 	}
 	
@@ -239,6 +262,24 @@ public class BoardController {
 		this.boardService.boardMemberInsert(vo);
 		
 		return "redirect:/board/boards";
+	}
+	
+	@ResponseBody
+	@PostMapping("board/idCheck")
+	public Map<String,String> idCheck(@RequestBody Map<String,String> map) {
+		
+		int result = this.boardService.idCheck(map.get("memId"));
+		log.info(map.get("memId"));
+		log.info(""+result);
+		Map<String,String> map2 = new HashMap<String, String>();
+		
+		if(result > 0) {
+			map2.put("result","true");			
+		}else {
+			map2.put("result", "false");
+		}
+		
+		return map2;
 	}
 }
 

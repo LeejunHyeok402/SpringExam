@@ -1,12 +1,18 @@
 package kr.or.ddit.service;
 
 import java.util.List;
+import java.util.Map;
 
 import kr.or.ddit.vo.BoardMemberVO;
 
 public interface BoardService {
+	//메소드 시그니처
 	
-	public List<BoardMemberVO> boards();
+	public List<BoardMemberVO> boards(Map<String,String> map);
 
-	int boardMemberInsert(BoardMemberVO boardMemberVO);
+	public int boardMemberInsert(BoardMemberVO boardMemberVO);
+
+	public int getTotal(Map<String,String> map);
+
+	public int idCheck(String memId);
 }
