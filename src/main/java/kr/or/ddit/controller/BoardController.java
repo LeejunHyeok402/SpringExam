@@ -5,6 +5,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -20,12 +21,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import kr.or.ddit.service.BoardService;
 import kr.or.ddit.util.ArticlePage;
+import kr.or.ddit.util.FileUploadUtil;
+import kr.or.ddit.vo.AttachVO;
 import kr.or.ddit.vo.BoardMemberVO;
 import kr.or.ddit.vo.BookVO;
 import lombok.extern.slf4j.Slf4j;
+
+
 
 //자바빈에 넣기
 @Slf4j
@@ -222,6 +228,122 @@ public class BoardController {
 		return bookVOList;
 	}
 	
+	/* 8.파일 업로드 폼 방식 요청처리
+	  파일업로드 폼 파일 <input type="file" ... 요소(=태그)값을
+	  스프링 MVC가 지원하는 MultipartFile 매개변수로 처리함
+	 */
+	@GetMapping("/register/register06")
+	public String registerFile() {
+		return "/register/register06";
+	}
+	
+	
+	@PostMapping("/board/registerFile01")
+	public String registerFile01Post(MultipartFile picture) {
+		log.info("registerFile01Post에  왔다.");
+		log.info("오리지널 파일명: "+picture.getOriginalFilename());
+		log.info("파일 크기: "+picture.getSize());
+		log.info("파일 확장자: "+picture.getContentType());
+		
+		return "register/success";
+	}
+	@PostMapping("/board/registerFile02")
+	public String registerFile02Post(MultipartFile picture,String userId,String password) {
+		log.info("registerFile02Post에  왔다.");
+		log.info("오리지널 파일명: "+picture.getOriginalFilename());
+		log.info("파일 크기: "+picture.getSize());
+		log.info("파일 확장자: "+picture.getContentType());
+		
+		log.info("userId: "+userId);
+		log.info("password: "+password);
+		
+		return "register/success";
+	}
+	@PostMapping("/board/registerFile03")
+	public String registerFile03Post(BoardMemberVO memVO) {
+		log.info("registerFile03Post에  왔다.");
+		log.info("오리지널 파일명: "+memVO.getPicture().getOriginalFilename());
+		log.info("파일 크기: "+memVO.getPicture().getSize());
+		log.info("파일 확장자: "+memVO.getPicture().getContentType());
+		
+		log.info("userId: "+memVO.getUserId());
+		log.info("password: "+memVO.getPassword());
+		
+		return "register/success";
+	}
+	@PostMapping("/board/registerFile04")
+	public String registerFile04Post(BoardMemberVO memVO) {
+		log.info("registerFile04Post에  왔다.");
+		log.info("memVO: "+memVO.toString());
+		log.info("오리지널 파일명: "+memVO.getPicture().getOriginalFilename());
+		log.info("파일 크기: "+memVO.getPicture().getSize());
+		log.info("파일 확장자: "+memVO.getPicture().getContentType());
+		log.info("오리지널 파일명: "+memVO.getPicture2().getOriginalFilename());
+		log.info("파일 크기: "+memVO.getPicture2().getSize());
+		log.info("파일 확장자: "+memVO.getPicture2().getContentType());
+		
+		log.info("userId: "+memVO.getUserId());
+		log.info("password: "+memVO.getPassword());
+		
+		return "register/success";
+	}
+	
+	//name[0]쓸려면 vo로 받을 것
+	@PostMapping("/board/registerFile05")
+	public String registerFile05PostList(List<MultipartFile> pictureList,BoardMemberVO memVO) {
+		log.info("registerFile04Post에  왔다.");
+		
+		for (MultipartFile list : pictureList) {
+			
+			log.info("오리지널 파일명: "+list.getOriginalFilename());
+			log.info("파일 크기: "+list.getSize());
+			log.info("파일 확장자: "+list.getContentType());
+			log.info("---------------------------------");
+		}
+		for (MultipartFile list : memVO.getPictureList()) {
+			log.info("vo에서 가져온것");
+			log.info("오리지널 파일명: "+list.getOriginalFilename());
+			log.info("파일 크기: "+list.getSize());
+			log.info("파일 확장자: "+list.getContentType());
+			log.info("---------------------------------");
+		}
+
+		return "register/success";
+	}
+	@PostMapping("/board/registerFile06")
+	public String registerFile06PostList(List<MultipartFile> pictureList,BoardMemberVO vo) {
+		log.info("registerFile06Post에  왔다.");
+		
+		MultipartFile[] pictureArray = vo.getPictureArray();
+		
+		for (MultipartFile multipartFile : pictureArray) {
+			log.info("오리지널 파일명: "+multipartFile.getOriginalFilename());
+			log.info("파일 크기: "+multipartFile.getSize());
+			log.info("파일 확장자: "+multipartFile.getContentType());
+			
+		}
+		
+		return "register/success";
+	}
+	
+	@GetMapping("/register/register07")
+	public String ajaxRegisterFile() {
+		return "register/register07";
+	}
+	
+	@RequestMapping(value="/board/uploadAjax" ,method=RequestMethod.POST,produces = "text/plain;charset=UTF-8")
+	public ResponseEntity<String> uploadAjax(MultipartFile[] file){
+		String originalFileName = file[0].getOriginalFilename();
+		log.info("originalName: "+originalFileName);
+		ResponseEntity<String> entity = new ResponseEntity<String>("SUCCESS_"+originalFileName,HttpStatus.OK);
+		UUID uuid = UUID.randomUUID();
+		List<AttachVO> list= FileUploadUtil.fileUploadAction(file, uuid.toString());
+		this.boardService.AttachInsert(list);
+		
+		return entity;
+	}
+	////////////////////////////////////////////////////////////////
+	
 	@GetMapping("board/boards")
 	public String boards(Model model,@RequestParam(defaultValue="1",required=false) int currentPage
 			,@RequestParam Map<String,String> map) {
@@ -249,7 +371,7 @@ public class BoardController {
 		model.addAttribute("show",size);
 		return "board/boards";
 	}
-	
+
 	@GetMapping("board/insertBoard")
 	public String board() {
 		return "board/insert";
@@ -264,22 +386,41 @@ public class BoardController {
 		return "redirect:/board/boards";
 	}
 	
+	//요청 URI : board/idCheck
+	//요청 파라미터: {"memId":"abc001"}
+	//방식 : post
 	@ResponseBody
 	@PostMapping("board/idCheck")
 	public Map<String,String> idCheck(@RequestBody Map<String,String> map) {
 		
 		int result = this.boardService.idCheck(map.get("memId"));
-		log.info(map.get("memId"));
+		log.info("memId: "+map);
+	
 		log.info(""+result);
-		Map<String,String> map2 = new HashMap<String, String>();
+		Map<String,String> mapResult = new HashMap<String, String>();
 		
 		if(result > 0) {
-			map2.put("result","true");			
+			mapResult.put("result","true");			
 		}else {
-			map2.put("result", "false");
+			mapResult.put("result", "false");
 		}
 		
-		return map2;
+		return mapResult;
+	}
+	
+	//요청 URI: /board/memdetail?memId=a001
+	//요청 파라미터 : memId = a001
+	@GetMapping("board/memdetail")
+	public String memDetail(Model model,String memId) {
+		log.info("memId: "+memId);
+		BoardMemberVO vo = this.boardService.memDetail(memId);
+		log.info("file: "+vo.toString());
+		
+		List<AttachVO> attachVOLits = vo.getAttachVOList();
+		
+		model.addAttribute("data",vo);
+		model.addAttribute("list",attachVOLits);
+		return "board/detail";
 	}
 }
 

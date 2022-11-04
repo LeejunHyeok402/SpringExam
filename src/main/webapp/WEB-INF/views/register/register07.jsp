@@ -1,0 +1,44 @@
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<!DOCTYPE html>
+<html>
+<head>
+<title>ajax File</title>
+<script src="/resources/js/jquery.min.js"></script>
+<script type="text/javascript">
+	$(function(){
+		$("#inputFile").on("change",function(event){
+			console.log("change");
+			
+			let files = event.target.files;
+			let file = files[0];
+			console.log("file: ",file);
+			
+			let formData = new FormData();
+			formData.append("file", file);
+			
+			
+			$.ajax({
+				url:"/board/uploadAjax",
+				processData:false,
+				contentType:false,
+				data:formData,
+				type:"post",
+				success:function(data){
+					console.log("data: ",data);
+				}
+			});
+			
+		});
+	});
+
+</script>
+
+</head>
+<body>
+	<form action="" method="post" enctype="multipart/form-data">
+		<p><input type="file" id="inputFile" name="picture" multiple></p>
+		<p><input type="submit" value="업로드"></p>
+	</form>
+</body>
+</html>

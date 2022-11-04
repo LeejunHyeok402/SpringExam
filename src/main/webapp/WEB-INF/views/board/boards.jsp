@@ -72,7 +72,7 @@
 				</form>
 				<div class="row">
 					<div class="col-sm-12">
-						<table class="table table-bordered dataTable table-striped"
+						<table class="table table-bordered dataTable table-striped table-hover"
 							id="dataTable" width="100%" cellspacing="0" role="grid"
 							aria-describedby="dataTable_info" style="width: 100%;">
 							<thead>
@@ -119,10 +119,10 @@
 									<fmt:formatDate var="resultRegDt" value="${row.memBir}"
 										pattern="yyyy-MM-dd" />
 									<c:if test="${stat.count % 2 != 0}">
-										<tr class="table-info">
+										<tr class="table-info" onclick="location.href='/board/memdetail?memId=${row.memId}'">
 									</c:if>
 									<c:if test="${stat.count % 2 == 0}">
-										<tr class="odd">
+										<tr class="odd"  onclick="location.href='/board/memdetail?memId=${row.memId}'">
 									</c:if>
 									<td class="sorting_1">${row.memId}</td>
 									<td>${row.memName}</td>

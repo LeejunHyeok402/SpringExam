@@ -2,13 +2,23 @@ package kr.or.ddit.vo;
 
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
+import javax.validation.constraints.Size;
+
+import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
+import lombok.Data;
+
+
 public class BoardMemberVO {
+	//필수 입력
 	private String memId;
 	private String memPass = "asdfasdf";
+	
+	//필수입력+ 최대 3글자까지 허용
 	private String memName;
 	private String memRegno1 = "760115";
 	private String memRegno2 = "1406420";
@@ -29,7 +39,46 @@ public class BoardMemberVO {
 	private int memMileage = -1;
 	private String memDelete =  "";
 	
+	private String introduction;
+	
+	//이미지 가져오기 용
+	private String filename;
+	
+	private List<AttachVO> attachVOList;
+	
 	private MultipartFile[] memberImage;
+	
+	private String userId;
+	private String password;
+	private MultipartFile picture;
+	private MultipartFile picture2;
+	private List<MultipartFile> pictureList;
+	private MultipartFile[] pictureArray;
+	
+	private int coin = 100;
+	@DateTimeFormat(pattern="yyyy-MM-dd")
+	private Date birth;
+	
+	private String gender;
+	
+	private String nationality;
+	
+	private String[] cars;
+	private String car;
+	
+	private String[] hobbyList;
+	private String hobby;
+	
+	private boolean merriaged;
+
+	//중첩된 자바빈
+	private AddressVO addressVO;
+	
+	private List<CardVO> cardVOList;
+	//개발자 여부
+	private String developer;
+	//외국인 여부
+	private boolean foreigner;
 	
 	public BoardMemberVO() {}
 
@@ -194,6 +243,182 @@ public class BoardMemberVO {
 		this.memberImage = memberImage;
 	}
 
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
+
+	public String getPassword() {
+		return password;
+	}
+
+	public void setPassword(String password) {
+		this.password = password;
+	}
+
+	public MultipartFile getPicture() {
+		return picture;
+	}
+
+	public void setPicture(MultipartFile picture) {
+		this.picture = picture;
+	}
+
+	public MultipartFile getPicture2() {
+		return picture2;
+	}
+
+	public void setPicture2(MultipartFile picture2) {
+		this.picture2 = picture2;
+	}
+
+	public List<MultipartFile> getPictureList() {
+		return pictureList;
+	}
+
+	public void setPictureList(List<MultipartFile> pictureList) {
+		this.pictureList = pictureList;
+	}
+
+	public MultipartFile[] getPictureArray() {
+		return pictureArray;
+	}
+
+	public void setPictureArray(MultipartFile[] pictureArray) {
+		this.pictureArray = pictureArray;
+	}
+
+	public String getFilename() {
+		return filename;
+	}
+
+	public void setFilename(String filename) {
+		this.filename = filename;
+	}
+
+	public String getIntroduction() {
+		return introduction;
+	}
+
+	public void setIntroduction(String introduction) {
+		this.introduction = introduction;
+	}
+
+	public int getCoin() {
+		return coin;
+	}
+
+	public void setCoin(int coin) {
+		this.coin = coin;
+	}
+
+	public Date getBirth() {
+		return birth;
+	}
+
+	public void setBirth(Date birth) {
+		this.birth = birth;
+	}
+
+	public String getGender() {
+		return gender;
+	}
+
+	public void setGender(String gender) {
+		this.gender = gender;
+	}
+
+	public String getNationality() {
+		return nationality;
+	}
+
+	public void setNationality(String nationality) {
+		this.nationality = nationality;
+	}
+
+	public String[] getCars() {
+		return cars;
+	}
+
+	public void setCars(String[] cars) {
+		this.cars = cars;
+	}
+
+	public String getCar() {
+		return car;
+	}
+
+	public void setCar(String car) {
+		this.car = car;
+	}
+
+	public String[] getHobbyList() {
+		return hobbyList;
+	}
+
+	public void setHobbyList(String[] hobbyList) {
+		this.hobbyList = hobbyList;
+	}
+
+	public String getHobby() {
+		return hobby;
+	}
+
+	public void setHobby(String hobby) {
+		this.hobby = hobby;
+	}
+
+	public boolean isMerriaged() {
+		return merriaged;
+	}
+
+	public void setMerriaged(boolean merriaged) {
+		this.merriaged = merriaged;
+	}
+
+	public AddressVO getAddressVO() {
+		return addressVO;
+	}
+
+	public void setAddressVO(AddressVO addressVO) {
+		this.addressVO = addressVO;
+	}
+
+	public List<CardVO> getCardVOList() {
+		return cardVOList;
+	}
+
+	public void setCardVOList(List<CardVO> cardVOList) {
+		this.cardVOList = cardVOList;
+	}
+
+	public String getDeveloper() {
+		return developer;
+	}
+
+	public void setDeveloper(String developer) {
+		this.developer = developer;
+	}
+
+	public boolean isForeigner() {
+		return foreigner;
+	}
+
+	public void setForeigner(boolean foreigner) {
+		this.foreigner = foreigner;
+	}
+
+	public List<AttachVO> getAttachVOList() {
+		return attachVOList;
+	}
+
+	public void setAttachVOList(List<AttachVO> attachVOList) {
+		this.attachVOList = attachVOList;
+	}
+
 	@Override
 	public String toString() {
 		return "BoardMemberVO [memId=" + memId + ", memPass=" + memPass + ", memName=" + memName + ", memRegno1="
@@ -201,9 +426,16 @@ public class BoardMemberVO {
 				+ memAdd1 + ", memAdd2=" + memAdd2 + ", memHometel=" + memHometel + ", memComtel=" + memComtel
 				+ ", memHp=" + memHp + ", memMail=" + memMail + ", memJob=" + memJob + ", memLike=" + memLike
 				+ ", memMemorial=" + memMemorial + ", memMemorialday=" + memMemorialday + ", memMileage=" + memMileage
-				+ ", memDelete=" + memDelete + ", memberImage=" + Arrays.toString(memberImage) + "]";
+				+ ", memDelete=" + memDelete + ", introduction=" + introduction + ", filename=" + filename
+				+ ", attachVOList=" + attachVOList + ", memberImage=" + Arrays.toString(memberImage) + ", userId="
+				+ userId + ", password=" + password + ", picture=" + picture + ", picture2=" + picture2
+				+ ", pictureList=" + pictureList + ", pictureArray=" + Arrays.toString(pictureArray) + ", coin=" + coin
+				+ ", birth=" + birth + ", gender=" + gender + ", nationality=" + nationality + ", cars="
+				+ Arrays.toString(cars) + ", car=" + car + ", hobbyList=" + Arrays.toString(hobbyList) + ", hobby="
+				+ hobby + ", merriaged=" + merriaged + ", addressVO=" + addressVO + ", cardVOList=" + cardVOList
+				+ ", developer=" + developer + ", foreigner=" + foreigner + "]";
 	}
 
-	
+
 
 }

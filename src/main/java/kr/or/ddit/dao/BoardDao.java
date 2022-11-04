@@ -38,4 +38,8 @@ public class BoardDao {
 	public int idCheck(String memId) {
 		return this.sqlSessionTemplate.selectOne("board.idCheck",memId);
 	}
+	
+	public BoardMemberVO memDetail(String memId) {
+		return this.sqlSessionTemplate.selectOne("board.memDetail", memId);
+	}
 }

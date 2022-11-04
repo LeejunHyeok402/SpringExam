@@ -1,11 +1,13 @@
 <%@ page contentType="text/html; charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <script src="/resources/js/jquery.min.js"></script>
+<script src="/resources/js/validation.js"></script>
 <script src="https://ssl.daumcdn.net/dmaps/map_js_init/postcode.v2.js"></script>
 <style type="text/css">
 	.imgs_wrap{
 		width:300px;
-		margin-top:50px;
+		margin-top:30px;
+		
 	}
 	.imgs_wrap img{
 		max-width: 100%;
@@ -37,6 +39,7 @@
 					let reader = new FileReader();
 					//e: reader가 이미지 객체를 읽는 이벤트
 					reader.onload = function(e){
+						
 						//e.target :이미지 객체
 						//e.target.result : reader가 이미지를 다 읽은 결과
 						let img_html = "<img src=\""+e.target.result+"\" />";
@@ -71,19 +74,27 @@
 	
 		function fn_idCheck(){
 			let user_id = $("#memId").val();
+			if(user_id == ""){
+				alert("아이디가 없습니다. 아이디를 입력해주세요");
+				$("#memId").focus();
+				return;
+			}
 			$.ajax({
 				  url: "/board/idCheck", // 클라이언트가 HTTP 요청을 보낼 서버의 URL 주소
 				    data: JSON.stringify({"memId" :user_id}),  // HTTP 요청과 함께 서버로 보낼 데이터
 				    method: "POST",   // HTTP 요청 메소드(GET, POST 등)
-				    contentType: 'application/json',
+				    contentType: 'application/json;charset=utf-8', //서버에 보내줄 데이터 타입
 				    dataType: "json",// 서버에서 보내줄 데이터의 타입
 				    success: function (data) {
 			           console.log(data.result);
 			           if(data.result == 'true'){
 			        	   alert("사용하실수 없는 아이디 입니다");
+			        	   $("#aSubmit").attr("disabled",true);
 			           }
 			           if(data.result == 'false'){
 			        	   alert("사용하실수 있는 아이디 입니다");
+			
+			        	   $("#aSubmit").attr("disabled",false);
 			           }
 			        }
 			});
@@ -99,15 +110,16 @@
      <!-- Card Content - Collapse -->
      <div class="collapse show" id="collapseCardExample">
          <div class="card-body">
-         <form id="frm" action="/board/insert" method="post" enctype="multipart/form-data">
-            <div class="mb-3">
+         <form id="frm" name="frm" action="/board/insert" method="post" enctype="multipart/form-data">
 				  <label for="exampleFormControlInput1" class="form-label">userId</label>
+            <div class="mb-3">
 				  <input type="text" class="form-control" name="memId" id="memId" placeholder="userId" value="" required>
-				  <button type="button" id="idCheck" onclick="fn_idCheck()">중복 체크</button>
-				</div>
+				  <button type="button" id="idCheck" class="btn btn-primary" onclick="fn_idCheck()">중복 체크</button>
+				  </div>
+				
 				  <div class="mb-3">
 				  <label for="exampleFormControlInput1" class="form-label">user name</label>
-				  <input type="text" class="form-control" name="memName" id="exampleFormControlInput1" placeholder="user name" value="" required>
+				  <input type="text" class="form-control" name="memName" id="memName" placeholder="user name" value="" required>
 				</div>		
 				<div class="mb-3">
 				  <label for="exampleFormControlTextarea1" class="form-label">birth</label>
@@ -123,27 +135,24 @@
 				</div>
 				 <div class="mb-3">
 				  <label for="exampleFormControlInput1" class="form-label">전화번호</label>
-				  <input type="text" class="form-control" name="memHp" id="memHp" placeholder="user phone" value="" pattern="/^[0-9]{2,3}[0-9]{3,4}[0-9]{4}/">
+				  <input type="text" class="form-control" name="memHp" id="memHp" placeholder="user phone" value="" pattern="/^(01[016789]{1})-?[0-9]{3,4}-?[0-9]{4}$/">
 				</div>
 				<div class="form-group row">
-				<label class="col-sm-2">사진</label>
+				<label class="col-sm-2">이미지</label>
 				<div class="col-sm-5">
 					<input type="file" id="memberImage" name="memberImage" class="form-control" multiple required>
 				</div>
-			</div>
+				</div>
 			<div class="form-group row">
 				<div class="imgs_wrap">
 					
 				</div>
 			</div>
 			<div class="mb-3">
-					 <input type="submit" id="aSubmit" class="btn btn-primary btn-icon-split" onsubmit="return false;" value="요청파라미터">
-	             
-	                    
+					 <input type="button" id="aSubmit" onclick="checkAddMember()" class="btn btn-primary btn-icon-split" value="요청파라미터" disabled>
+					 <a href="/board/boards" class="btn btn-secondary btn-icon-split">취소</a>
 	                </div>
 				</form>
-				
-				
          </div>
      </div>
  </div>
